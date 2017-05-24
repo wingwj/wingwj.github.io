@@ -1,14 +1,28 @@
-# Keystone 多级配额能力分析
+# Keystone多级租户及配额 能力解析
 
 
 
-## 调研背景
+## 概述
 
-​	版本：OpenStack Ocata
+随着OpenStack项目逐步发展，其支持项目已从小型的数据中心走向更大规模的部署/应用场景。在一些大型项目中，常见到类似VDC等概念，需要整个组织级别能够逐级细分，并且要求各级组织间能提供严格的ACL控制与配额管理能力。
 
-​	来源：之前在各项目招标中，常见有关多VDC及多级租户等业务诉求，需要对相关支持度进行摸底。
+Keystone作为OpenStack中提供统一身份认证管理的组件，自Diablo版本发布以来，从仅支持小的扁平的租户组织架构，到v3版本引入Domain/Group等概念，逐步在完善分级管理的能力。
 
-​	目的：验证Keystone 多级租户配额能力，是否支持类似"省市县"的多级结构。
+那么，面对日渐复杂的分级诉求，其支持能力如何呢？下文结合一个需求案例，来具体分析下当前Keystone对于多级租户管理的支持度。
+
+
+
+## 需求案例
+
+某IT公司包含几个部门，每个部门下又有数个科室，要求资源能够逐级分配；且公司级运维管理员能够对部门资源进行管理，而部门管理员需要对科室资源执行部分操作。
+
+分析以上需求描述中，包含了三层诉求：
+
+1. 一是要求云平台能够提供多级租户设置，且其深度能够满足细分需求；
+2. 二是要求能够对各级管理员相关权限进行分别指定；
+3. 三是逐级分配诉求中，隐含了对于配额继承/共享的要求；即资源是分给整个部门的，而整个部门除自己预留的部分外，剩余的资源可再分配到不同的科室去。
+
+以上内容转化到OpenStack中，可大致转化为以下模型：
 
 ```
    +---------------------------------+
@@ -26,7 +40,7 @@
    |    +---------+  +---------+     |
    |    | Prj_1_a |  | Prj_1_b |     |
    |    +---------+  +---------+     |
-   |    |quota=10 |  |quota=10 |     |
+   |    |quota=50 |  |quota=20 |     |
    |    +---------+  +---------+     |
    |          /\                     |
    |         /  \                    |
@@ -42,11 +56,42 @@
    +---------------------------------+
 ```
 
+下文针对这三点诉求，基于OpenStack Ocata版本，采用实际操作来求证下，之后根据验证结果来给出具体解析。
 
 
-## 验证步骤
 
-### 1. 准备两个租户，指定父子关系：
+## 多级租户支持
+
+这里先验证下多级租户的支持度。
+
+陆续指定各租户的从属关系，逐个创建新租户。可见，当创建到第6层时提示已达最大层级深度。
+
+![](images/level_1.PNG)
+
+![](images/level_2.PNG)
+
+简单说明下：
+
+1. Keystone 中对于多租户的递归深度，考虑功能与性能平衡，默认设定为5层；
+2. 可以通过修改配置项"max_project_tree_depth"来自定义。
+
+ 可见，多级租户设置这里，是能满足需求的。
+
+
+
+## 权限设置
+
+按照之前需求，这一部分需要能够针对不同层级的管理员，提供不同的操作能力。
+
+这一部分与Policy有关，当前OpenStack中规则管理还是分散在各组件"policy.json"中，需根据角色来指定对应规则。这一部分本文不展开。
+
+
+
+## 多级配额支持
+
+有了之前的验证基础，还剩多级配额的相关功能需要验证下。同样先在环境上实际验证下。
+
+#### 1. 准备两个租户，指定父子关系：
 
 ![](images/00.PNG)
 
@@ -57,17 +102,19 @@
 可见，租户不指定domain时默认同为default。且：
 
 1. 无父租户的Project，其父租户是默认domain；
+
 2. 有父租户的Project，其父租户即指定的父租户。
 
+   ​
 
 
-### 2. 分别在两个租户内创建两个用户：
+#### 2. 分别在两个租户内创建两个用户：
 
 ![](images/02.PNG)
 
 
 
-### 3. 设置角色：
+#### 3. 设置角色：
 
 将父租户中的用户，在子租户中也设置为"admin"角色。
 
@@ -79,7 +126,7 @@
 
 
 
-### 4. 设置父租户的配额：
+#### 4. 设置父租户的配额：
 
 这里选取keypair为实验对象：
 
@@ -91,7 +138,7 @@
 
 
 
-### 5. 在子租户内创建资源：
+#### 5. 在子租户内创建资源：
 
 先使用父租户管理员用户，在子租户内尝试创建keypair：
 
@@ -105,7 +152,7 @@
 
 
 
-### 6. 在父租户内创建资源：
+#### 6. 在父租户内创建资源：
 
 切换回父租户，重新创建keypair：
 
@@ -115,7 +162,7 @@
 
 
 
-### 7. 扩容父租户的配额，测试父租户能否为自身再预留部分资源：
+#### 7. 扩容父租户的配额，测试父租户能否为自身再预留部分资源：
 
 首先将父租户配额修改为3：
 
@@ -131,7 +178,7 @@
 
 
 
-### 8. 疑问：
+#### 8. 疑问：
 
 根据上文测试结果，总结下上面的判断行为为：
 
@@ -142,7 +189,7 @@
 
 
 
-### 9. 回到子租户，切换子用户重新创建：
+#### 9. 回到子租户，切换子用户重新创建：
 
 回到我们的测试场景。
 
@@ -158,7 +205,7 @@
 
 
 
-### 10. 在父租户内再次创建：
+#### 10. 在父租户内再次创建：
 
 接着，我们回到父租户用户，再次查看下当前父租户资源用量。见下图，可见当前仅能看到最开始时，父用户自己创建的一个keypair，而子用户刚在上一步创建的两个keypair 却看不到了：
 
@@ -170,7 +217,7 @@
 
 
 
-### 11. 二次疑问：
+#### 11. 二次疑问：
 
 综上，第二次与第一次的结果，似乎截然相反。
 
@@ -180,7 +227,7 @@
 
 
 
-### 12. 释疑：
+#### 12. 释疑：
 
 这里解释下，为何会出现以上两种现象。
 
@@ -202,7 +249,7 @@
 
 
 
-### 13. 附加测试
+#### 13. 附加测试
 
 下面拿虚拟机试试。
 
@@ -225,7 +272,7 @@
 
 ## 社区现状：
 
-说到这里，就顺便聊聊Keystone 社区有关多级租户配额的发展现状。
+说到这里，就顺便聊聊Keystone 社区有关多级租户相关的发展现状。
 
 
 
@@ -240,9 +287,11 @@
 
 
 
-### 各组件的多级租户配额支持
+### 各组件的多级配额支持
 
-而我们最关心的，各大组件配额嵌套的问题，其实社区之前就将BP同步给各个组件了。不过之前仅Cinder完成了，Nova的代码几个版本都没提进去，而其余模块甚至都还没开始动（注：有兴趣可以去社区做贡献）。
+而本文最关心的，各大组件配额嵌套的问题，其实社区之前就将BP同步给各个组件了。不过之前仅Cinder完成了，Nova的BP几个版本都没提进去已废弃，而其余模块甚至都还没开始动。
+
+不过，社区近期已开始关注相关议题。在今年2月底的首届OpenStack PTG（The Project Teams Gathering）上，Nova专门就Quota分级进行了讨论，新的BP在去年底也已重新提出，相关组件功能设计已经开始快速推进。
 
 具体信息汇总如下：
 
@@ -250,30 +299,27 @@
 2. [https://blueprints.launchpad.net/cinder/+spec/cinder-nested-quota-driver](https://blueprints.launchpad.net/cinder/+spec/cinder-nested-quota-driver)
 3. [https://blueprints.launchpad.net/glance/+spec/nested-quota](https://blueprints.launchpad.net/glance/+spec/nested-quota)
 4. [https://blueprints.launchpad.net/neutron/+spec/nested-quota-driver](https://blueprints.launchpad.net/neutron/+spec/nested-quota-driver)
+5. [https://review.openstack.org/#/c/284454/](https://review.openstack.org/#/c/284454/)
+6. https://blueprints.launchpad.net/nova/+spec/hierarchy-quota-driver
 
-
-不过，社区近期已开始关注相关议题。在今年2月底的首届OpenStack PTG（The Project Teams Gathering）上，Nova专门就Quota分级进行了讨论。相关组件功能设计已经开始快速推进：
-
-1. [https://blueprints.launchpad.net/nova/+spec/hierarchy-quota-driver](https://blueprints.launchpad.net/nova/+spec/hierarchy-quota-driver)
-2. [https://review.openstack.org/#/c/284454/](https://review.openstack.org/#/c/455709/)
-3. [https://review.openstack.org/#/c/455709/](https://review.openstack.org/#/c/455709/)
 
 
 
 ### Keystone多级租户的后续计划
 
-此外，有关分级管理的其他功能，Keystone在Ocata版本的规划如下，此处一并附上：
+此外，有关分级管理的其他功能，Keystone在Pike版本的规划如下，此处一并附上：
 
-1. Domain分级，Spec 需重新提交：[https://blueprints.launchpad.net/keystone/+spec/hierarchical-domains](https://blueprints.launchpad.net/keystone/+spec/hierarchical-domains)
-2. Project 递归删除/禁用，实现中，当前还不支持：[https://blueprints.launchpad.net/keystone/+spec/project-tree-deletion](https://blueprints.launchpad.net/keystone/+spec/project-tree-deletion)
-3. 子租户是否继承Parent，Spec 修改中：[https://blueprints.launchpad.net/keystone/+spec/inherit-from-parent](https://blueprints.launchpad.net/keystone/+spec/inherit-from-parent)
+1. Project 递归删除/禁用，Spec已批准，正在实现中：[https://blueprints.launchpad.net/keystone/+spec/project-tree-deletion](https://blueprints.launchpad.net/keystone/+spec/project-tree-deletion)
+2. Domain分级，Spec 需重新提交：[https://blueprints.launchpad.net/keystone/+spec/hierarchical-domains](https://blueprints.launchpad.net/keystone/+spec/hierarchical-domains)
+3. 子租户是否继承Parent，Spec 需重新提交：[https://blueprints.launchpad.net/keystone/+spec/inherit-from-parent](https://blueprints.launchpad.net/keystone/+spec/inherit-from-parent)
+4. Limits API 讨论稿：[https://review.openstack.org/#/c/455709/](https://review.openstack.org/#/c/455709/)
 
 
 
 
 ## 结论
 
-1. Keystone 在Mitaka版本已支持多级租户设置；
+1. Keystone 在Mitaka版本已支持多级租户设置，最大嵌套层级默认为5；
 
 2. 但多级各租户间的配额关联还未实现，父子租户间配额独立；
 
