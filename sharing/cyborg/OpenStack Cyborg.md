@@ -70,7 +70,7 @@ Cyborg最终在OpenStack Queen版本中首次正式发布。
 
 这里先用一张图来概括Cyborg的作用：
 
-![](images/cyborg_01.PNG)
+![](images/cyborg_01.png)
 
 让我们对Cyborg负责的领域进行任务分解：
 
@@ -90,7 +90,7 @@ Cyborg最终在OpenStack Queen版本中首次正式发布。
 
 以下是当前Cyborg的进程组成图：
 
-![](images/cyborg_02.PNG)
+![](images/cyborg_02.png)
 
 不管从部署形态与工作方式来看，Cyborg与Nova服务的关系很近。从架构图上也能看到cyborg与Nova的相似性。Cyborg遵从OpenStack的四原则，对外统一提供RESTful API，组件内通过RPC方式通信，组件间共享一个RDS。
 
@@ -149,17 +149,17 @@ Cyborg最终在OpenStack Queen版本中首次正式发布。
 
 以下，让我们从placement视角来重新审视这些资源。我们同样使用RP和RC来定义这些加速资源：
 
-![](images/cyborg_03.PNG)
+![](images/cyborg_03.png)
 
 具体对象模型与placement的对应：
 
-![](images/cyborg_04.PNG)
+![](images/cyborg_04.png)
 
 注意，一个设备可能有多个子设备。在GPU场景下一般只有一个，但在FPGA下可能会分为多个Region，可以分别来控制（事实上，每个region还能够再分为多个加速器）。参考以上定义，在GPU场景下，每个vGPU就能够视为独立的加速器单元，即一个accelerator。
 
 使用示例：
 
-![](images/cyborg_05.PNG)
+![](images/cyborg_05.png)
 
 ### 2.6 与Nova交互
 
@@ -167,13 +167,13 @@ Cyborg最终在OpenStack Queen版本中首次正式发布。
 
 注：与Nova的交互在Rocky版本中仍未全部完成，当前计划在Stein实现。
 
-![](images/cyborg_06.PNG)
+![](images/cyborg_06.png)
 
 其中，创建加速器类似于Nova向Neutron请求port的过程。其中，device profile同上图中对应模型，形如以下形式：
 
 整体交互流程图，可以绘制如下：
 
-![](images/cyborg_07.PNG)
+![](images/cyborg_07.png)
 
 ### 2.7 对外接口
 
@@ -266,7 +266,7 @@ class Deployable(Base):
 
 以下是Cyborg项目最新的架构演进图。包含在之前以及之后版本演进中逐步添加的各功能组件。
 
-![](images/cyborg_10.PNG)
+![](images/cyborg_10.png)
 
 ### 3.2 近期BP分析
 
@@ -304,19 +304,19 @@ class Deployable(Base):
 
 ### 3.3 Cyborg in OpenStack
 
-![](images/cyborg_11.PNG)
+![](images/cyborg_11.png)
 
 注意：Nova不直接调用Cyborg API，而是通过os-acc（类似Nova调用Cinder时使用的os-brick库，以及使用网络时的os-vif）来进行交互。
 
 ### 3.4 与ovs-dpdk的配合（计划）
 
-![](images/cyborg_12.PNG)
+![](images/cyborg_12.png)
 
 ### 3.5 与容器的配合（计划）
 
 计划是将Cyborg的数据模型，统一于K8s的DPI（Device Plugin Interface），这样就可以将这些加速设备暴露给容器来使用。此外，Cyborg后续可能还会提供用于CRD（Custom Resource Definition) 的加速器控制器，目前还在构想中。
 
-![](images/cyborg_13.PNG)
+![](images/cyborg_13.png)
 
 
 
@@ -326,7 +326,7 @@ class Deployable(Base):
 
 在去年底的OpenStack Berlin Summit上，keynotes中提到的GPU等硬件利用的新趋势。此外，在Nova及其他社区讨论中，都有涉及Cyborg的相关内容。对于一个新项目来说，还是有不少关注度的。
 
-![](images/cyborg_14.PNG)
+![](images/cyborg_14.png)
 
 ### 4.2 代码贡献分析
 
@@ -334,15 +334,15 @@ class Deployable(Base):
 
 在当前Stein版本中，参与公司如下：
 
-![](images/cyborg_15.PNG)
+![](images/cyborg_15.png)
 
 但是总的提交数在Stein版本真的很少，只有17个。分布如下：
 
-![](images/cyborg_16.PNG)
+![](images/cyborg_16.png)
 
 下图为最近的提交详情，近期的提交数也很低。我最近也试着先提交了几个文档Patch，还一直处于没人理的状态。。
 
-![](images/cyborg_17.PNG)
+![](images/cyborg_17.png)
 
 
 
