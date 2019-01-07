@@ -3,10 +3,14 @@
 
 亡羊补牢，从此开始。
 
+Updated on Jan 7th，新的一年，记起来~
 
 
+## Legacy:
 * [Keystone 多级租户研究-Mitaka版本，已废弃](sharing/keystone_hierarchical_projects/FAR_for_keystone_hierarchical_projects.md)
 * [Keystone 多级配额研究](sharing/keystone_hierarchical_quota/keystone_hierarchical_quota.md)
 * [DevStack 安装配置遇到的坑](sharing/tips/DevStack_installing.md)
+----------------
+## 2019:
 * [Cyborg 项目解析](sharing/cyborg/OpenStack%20Cyborg.md)
 * [补遗：柏林峰会 观感总结](sharing/berlin_summit/OpenStack_Berlin_Summit.md)
