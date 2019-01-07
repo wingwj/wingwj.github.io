@@ -22,7 +22,7 @@ Keystone作为OpenStack中提供统一身份认证管理的组件，自Diablo版
 2. 二是要求能够对各级管理员相关权限进行分别指定；
 3. 三是逐级分配诉求中，隐含了对于配额继承/共享的要求；即资源是分给整个部门的，而整个部门除自己预留的部分外，剩余的资源可再分配到不同的科室去。
 
-以上内容转化到OpenStack中，可大致转化为以下模型：
+以上内容对应到OpenStack中，可大致转化为以下模型：
 
 ```
    +---------------------------------+
@@ -311,7 +311,7 @@ Keystone作为OpenStack中提供统一身份认证管理的组件，自Diablo版
 
 1. Project 递归删除/禁用，Spec已批准，正在实现中：[https://blueprints.launchpad.net/keystone/+spec/project-tree-deletion](https://blueprints.launchpad.net/keystone/+spec/project-tree-deletion)
 2. Domain分级，Spec 需重新提交：[https://blueprints.launchpad.net/keystone/+spec/hierarchical-domains](https://blueprints.launchpad.net/keystone/+spec/hierarchical-domains)
-3. 子租户是否继承Parent，Spec 需重新提交：[https://blueprints.launchpad.net/keystone/+spec/inherit-from-parent](https://blueprints.launchpad.net/keystone/+spec/inherit-from-parent)
+3. 子租户是否继承父租户，Spec 需重新提交：[https://blueprints.launchpad.net/keystone/+spec/inherit-from-parent](https://blueprints.launchpad.net/keystone/+spec/inherit-from-parent)
 4. Limits API 讨论稿：[https://review.openstack.org/#/c/455709/](https://review.openstack.org/#/c/455709/)
 
 
