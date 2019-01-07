@@ -1,4 +1,4 @@
-# Keystone多级租户及配额 能力解析
+# Keystone多级租户及配额 能力解析（Legacy）
 
 
 
