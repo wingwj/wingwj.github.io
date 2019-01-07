@@ -3,7 +3,7 @@
 
 亡羊补牢，从此开始。
 
-Updated on Jan 7th，新的一年，记起来~
+**Updated on Jan 7th，新的一年，记起来！**
 
 
 ## Legacy:
