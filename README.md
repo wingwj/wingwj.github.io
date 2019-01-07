@@ -8,4 +8,4 @@
 * [Keystone 多级租户研究-Mitaka版本，已废弃](sharing/keystone_hierarchical_projects/FAR_for_keystone_hierarchical_projects.md)
 * [Keystone 多级配额研究](sharing/keystone_hierarchical_quota/keystone_hierarchical_quota.md)
 * [DevStack 安装配置遇到的坑](sharing/tips/DevStack_installing.md)
-* [Cyborg 项目解析](sharing/Cyborg/OpenStack%20Cyborg.md)
+* [Cyborg 项目解析](sharing/cyborg/OpenStack%20Cyborg.md)
