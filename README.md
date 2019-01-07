@@ -9,3 +9,4 @@
 * [Keystone 多级配额研究](sharing/keystone_hierarchical_quota/keystone_hierarchical_quota.md)
 * [DevStack 安装配置遇到的坑](sharing/tips/DevStack_installing.md)
 * [Cyborg 项目解析](sharing/cyborg/OpenStack%20Cyborg.md)
+* [补遗：柏林峰会 观感总结](sharing/berlin_summit/OpenStack_Berlin_Summit.md)
