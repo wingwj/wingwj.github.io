@@ -3,7 +3,7 @@
 
 亡羊补牢，从此开始。
 
-Updated on Jan 7th，新的一年，记起来~
+**Updated on Jan 7th，新的一年，记起来！**
 
 
 ## Legacy:
@@ -14,3 +14,4 @@ Updated on Jan 7th，新的一年，记起来~
 ## 2019:
 * [Cyborg 项目解析](sharing/cyborg/OpenStack%20Cyborg.md)
 * [补遗：柏林峰会 观感总结](sharing/berlin_summit/OpenStack_Berlin_Summit.md)
+* [StarlingX: stx-nfv project](sharing/starlingx/stx-nfv.md)

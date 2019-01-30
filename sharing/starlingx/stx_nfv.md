@@ -50,6 +50,8 @@ StarlingX基于OpenStack各组件，对上层提供了一套对象抽象来方�
 
 以下将从stx-nfv project开始，先完成这个中心项目的学习，然后将触角逐步延伸，逐个将它涉及的其他部件添加进来，最终构成一张完整的StarlingX技术地图。
 
+*注：以下分析均基于OpenStack社区StarlingX 项目 2019-01-23日版本。*
+
 
 
 ## 三、STX-NFV Project 详解
@@ -217,7 +219,7 @@ StarlingX基于OpenStack各组件，对上层提供了一套对象抽象来方�
 
 在stx-nfv project中第二部分功能，是有关Guest Agent的。
 
-接下来看下 Guest Agent的功能。它其实与原生的Guest Agent没太大区别，都是通过UNIX socket在VM与hypervisor间打开一条通信渠道，让VM内的消息能传出去，VM外的指令能发进来；消息以 json格式传递。具体原理可以查看这里：*http://www.linux-kvm.org/page/Virtio-serial_API*。说到与原生的区别，主要是针对StarlingX的逻辑，又做了一些消息的额外传递&处理；类似的通信功能都是通过这条通道来实现的。当前主要提供了三大功能：
+接下来看下 Guest Agent的功能。它其实与原生的Guest Agent没太大区别，都是通过UNIX socket在VM与hypervisor间打开一条通信渠道，让VM内的消息能传出去，VM外的指令能发进来；消息以 json格式传递。具体原理可以查看这里：*http://www.linux-kvm.org/page/Virtio-serial_API* 。说到与原生的区别，主要是针对StarlingX的逻辑，又做了一些消息的额外传递&处理；类似的通信功能都是通过这条通道来实现的。当前主要提供了三大功能：
 
 -   心跳服务（Heartbeat Service）；
 
