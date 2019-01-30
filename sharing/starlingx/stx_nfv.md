@@ -1,4 +1,4 @@
-# 庖丁解牛——StarlingX技术详解（1. stx-nfv篇）
+# 庖丁解牛——StarlingX 技术详解（1. stx-nfv篇）
 
 Author: WingWJ
 
