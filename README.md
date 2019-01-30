@@ -14,4 +14,6 @@
 ## 2019:
 * [Cyborg 项目解析](sharing/cyborg/OpenStack%20Cyborg.md)
 * [补遗：柏林峰会 观感总结](sharing/berlin_summit/OpenStack_Berlin_Summit.md)
-* [StarlingX: stx-nfv project](sharing/starlingx/stx-nfv.md)
+* StarlingX 技术详解：
+  * [stx-nfv project](sharing/starlingx/stx-nfv.md)
+  * *to be continue..*
