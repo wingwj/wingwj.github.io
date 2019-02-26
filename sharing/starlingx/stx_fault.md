@@ -82,7 +82,7 @@ FM服务主要由两大进程提供，分别是fm-api 和 fmManager：
 
 先看看fm-api 进程。这部分，其实对应于fm-rest-api包，python实现。它是一个标准的wsgi服务，基于pecan框架对外提供rest-api。启动入口在 stx-fault/fm-rest-api/fm/fm/cmd/api.py中的main() 方法。
 
-FM对外提供的全部rest接口，可在 stx-fault/api-ref/source/api-ref-fm-v1-fault.rst 中看到。当然，直接看官网API更直观：*https://docs.starlingx.io/api-ref/stx-fault/api-ref-fm-v1-fault.html*。仔细看下这些接口，其实fm-api对外只提供了一些查询类操作，以及基于告警之上的功能（如事件及抑制）；接口查询直接通过调取dbapi获取（或者换句话说，从fm-db）。
+FM对外提供的全部rest接口，可在 stx-fault/api-ref/source/api-ref-fm-v1-fault.rst 中看到。当然，直接看[官网API](https://docs.starlingx.io/api-ref/stx-fault/api-ref-fm-v1-fault.html)更直观。仔细看下这些接口，其实fm-api对外只提供了一些查询类操作，以及基于告警之上的功能（如事件及抑制）；接口查询直接通过调取dbapi获取（或者换句话说，从fm-db）。
 
 通过python-fmclient 提供的CLI，能够更好地理解提供的接口，这部分和普通OpenStack其他组件一致。使用时直接输入”*fm &lt;subcommand&gt;*”：
 
@@ -210,11 +210,11 @@ void FmSocketServerProcessor::handle_socket_data(int fd,
 
 我查阅了一些资料，感觉这里可能是由于OpenStack社区要求的。StarlingX是风河(Wind River) 基于自研Titanium Cloud 开源而来，基于OpenStack社区开源项目要求而实现了一套rest接口，即fm-rest-api，而自研组件本身使用的还是fm-api包。
 
-证据就是，分别查看fm-api与fm-rest-api的\_\_init\_\_.py文件，前者是2013年的，而后者是2018年的：
+证据的话在一些细节上也有体现。比如分别查看fm-api与fm-rest-api的\_\_init\_\_.py文件，前者是2013年的，而后者是2018年的：
 
 ![](images/stx-fault-007.jpg)
 
-后续从了解风河产品的朋友那儿获知的消息也确定了这一点，在风河Titanium Cloud中确实是没有fm-rest-api包的，**之前接口是通过sysinv统一暴露的**。疑问一解决！😊
+后续从了解风河产品的朋友那儿获知的消息也确定了这一点，在风河Titanium Cloud中其实是没有fm-rest-api包的，**之前接口是通过sysinv统一暴露的**。疑问一解决！😊
 
 所以，开头的疑问二，为什么fm-api与fmManager之家没有交互，也就一下就想明白了。因为**在最开始设计的时候，就没有fm-rest-api组件**啊，当然也就没有交互了。。
 
@@ -242,4 +242,4 @@ void FmSocketServerProcessor::handle_socket_data(int fd,
 
 ![](images/stx-fault-010.jpg)
 
-以上。这篇stx-fault的分解就到这里，换个组件继续边看边写。：）
+以上。第二篇stx-fault project 的分解就到这里，换个组件继续边看边写。：）
