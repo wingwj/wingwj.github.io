@@ -28,11 +28,11 @@ StarlingX最早起源于Wind River Titanium Cloud R5，由Intel和风河贡献�
 
 先来看下StarlingX的架构图：
 
-![](images/stx_001.jpg)
+![](images/stx-nfv-001.jpg)
 
 StarlingX基于OpenStack各组件，对上层提供了一套对象抽象来方便上层编排；而下层则结合当前云计算领域最流行的各项技术，如libvirt、OVS、DPDK、Ceph、K8s等。此外，StarlingX还提供了很多中间件如软件管理、故障管理、服务管理等功能，提供了更丰富的管理能力。
 
-![](images/stx_002.jpg)
+![](images/stx-nfv-002.jpg)
 
 上图中，列举了StarlingX涉及的各个项目（project），分为主要项目及支持项目两类。其中重要的为上面的八个，对应各个项目名，分别提供了以下功能：
 
@@ -82,7 +82,7 @@ StarlingX基于OpenStack各组件，对上层提供了一套对象抽象来方�
 
 整个stx-nfv项目，包含 nfv、guest-agent/server、nova-api-proxy 三大功能：
 
-![](images/stx_003.jpg)
+![](images/stx-nfv-003.jpg)
 
  
 
@@ -90,11 +90,11 @@ StarlingX基于OpenStack各组件，对上层提供了一套对象抽象来方�
 
 其中最关键的部件为 nfv，代码结构大致如下。简单看下几个模块的代码名，就能了解到它们提供的功能：
 
-![](images/stx_004.jpg)
+![](images/stx-nfv-004.jpg)
 
 这里能看到nfv有关的全部进程：
 
-![](images/stx_005.jpg)
+![](images/stx-nfv-005.jpg)
 
 以下，重点介绍下nfv各组件的主要功能。各模块功能介绍如下，其中作为独立进程启动的只有前三个：
 
@@ -233,7 +233,7 @@ StarlingX基于OpenStack各组件，对上层提供了一套对象抽象来方�
 
 -   虚拟机组（Server Group）。
 
-![](images/stx_006.jpg)
+![](images/stx-nfv-006.jpg)
 
  
 
@@ -259,7 +259,7 @@ StarlingX基于OpenStack各组件，对上层提供了一套对象抽象来方�
 
 -   VIM能够启用和禁用心跳故障报告，以及在心跳故障时采取客户指定的纠正措施。
 
-![](images/stx_007.jpg)
+![](images/stx-nfv-007.jpg)
 
  
 
@@ -275,7 +275,7 @@ StarlingX基于OpenStack各组件，对上层提供了一套对象抽象来方�
 
 下图以Guest Agent为视角，罗列了它与其他组件的协作关系：
 
-![](images/stx_008.jpg)
+![](images/stx-nfv-008.jpg)
 
  
 
@@ -315,13 +315,13 @@ admin_tenant_name=services
 
 最关键的逻辑，其实是在 nova-api-proxy/acceptor.py 里定义的。即如果操作是POST类型且操作类型在列表里时，这些操作需要先路由到nfvi 去。否则直接发往OpenStack Nova去。——简单概括下，即nfvi 把需要转发的消息，事先在nova-api-proxy里注册了。
 
- ![](images/stx_009.jpg)
+ ![](images/stx-nfv-009.jpg)
 
 ### 5. 小结
 
 本章最后，把本文中涉及的各组件画到一起，如下：
 
-![](images/stx_010.jpg)
+![](images/stx-nfv-010.jpg)
 
 其中组件sysinv（stx-config相关）、FM（stx-fault相关）、mtce Agent（stx-metal相关），由于只在本文流程中涉及还没开始展开，所以暂时以虚线标注，等后续介绍时再逐步填充进去，最终组成一张完整的技术地图。
 
