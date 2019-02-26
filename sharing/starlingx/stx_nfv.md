@@ -4,7 +4,7 @@ Author: WingWJ
 
 Date: 30th, Jan, 2019
 
-StarlingX version: 23th, Jan, 2019
+StarlingX version: 23rd, Jan, 2019
 
 
 
