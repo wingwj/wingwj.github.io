@@ -16,4 +16,6 @@
 * [补遗：柏林峰会 观感总结](sharing/berlin_summit/OpenStack_Berlin_Summit.md)
 * StarlingX 技术详解：
   * [stx-nfv project](sharing/starlingx/stx_nfv.md)
+  * [stx-fault project](sharing/starlingx/stx_fault.md)
+  
   * *to be continue..*
