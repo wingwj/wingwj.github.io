@@ -92,7 +92,7 @@ IDE打开，代码结构如下：
 
 - service-mgmt-tools：提供sm_tools，可通过命令行来对SM进行管理配置。提供的命令脚本，可以在stx-ha/service-mgmt-tools/sm-tools/setup.py 中看到，如下：
 
-- - sm-configure
+  - sm-configure
   - sm-provision
   - sm-deprovision
   - sm-dump
@@ -408,7 +408,7 @@ SM的启动点，位于stx-ha/service-mgmt/sm-1.0.0/src/main.c。（*吐槽下�
 
 - 配置SM DB：包括主数据库“/var/run/sm/sm.db” 、心跳数据库“/var/run/sm/sm.hb.db”；
 
-- - 读取主（master）数据库“/var/lib/sm/sm.db”的数据，写入“/var/run/sm/sm.db”DB中；
+  - 读取主（master）数据库“/var/lib/sm/sm.db”的数据，写入“/var/run/sm/sm.db”DB中；
   - 执行sqlite命令：“PRAGMA      integrity_check;”来检查完整性。效果如下：
   - ```
     controller-0:~$ sqlite3 /var/lib/sm/sm.db 
@@ -428,7 +428,6 @@ SM的启动点，位于stx-ha/service-mgmt/sm-1.0.0/src/main.c。（*吐槽下�
     sqlite>
     ```
 
-  - 
 
 - 执行db补丁脚本：“cat /var/lib/sm/patches/sm-patch.sql | sqlite3 /var/run/sm/sm.db 2>&1”
 
@@ -478,7 +477,7 @@ SM的启动点，位于stx-ha/service-mgmt/sm-1.0.0/src/main.c。（*吐槽下�
 
 - 进程初始化。只列重点：
 
-- - 初始化了一堆模块和线程，如 hw、msg、alarm、log等；
+  - 初始化了一堆模块和线程，如 hw、msg、alarm、log等；
 
   - 注册心跳检测线程。通过创建一组（8个）心跳线程“sm_heartbeat”来进行心跳保持（0.4s异常后警告，3s后失败）；
 
@@ -494,7 +493,7 @@ SM的启动点，位于stx-ha/service-mgmt/sm-1.0.0/src/main.c。（*吐槽下�
 
   - 按照顺序，包含：
 
-  - - Node
+    - Node
     - service_domain
     - service_domain_neighbor
     - service_domain_interface
@@ -505,7 +504,7 @@ SM的启动点，位于stx-ha/service-mgmt/sm-1.0.0/src/main.c。（*吐槽下�
 
   - service_domain_api 初始化：
 
-  - - 初始化对应表；
+    - 初始化对应表；
     - service_domain_fsm：注册callback函数（hello）。回调函数中包含fsm_event_handler()，它会根据service_domain表中记录的service_domain的具体状态，走不同的处理分支；
     - service_domain_neighbor_fsm：基本同上，注册callback函数（hello、pause、exchange、exchange_start），初始化event_handler；
     - 初始化service_domain_scheduler：
