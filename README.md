@@ -20,7 +20,7 @@
 ## OpenStack
 * [Cyborg 项目解析](sharing/cyborg/OpenStack%20Cyborg.md)
 * [补遗：柏林峰会 观感总结](sharing/berlin_summit/OpenStack_Berlin_Summit.md)
-* 边缘计算相关：**StarlingX** 技术详解：
+* 边缘计算相关：**StarlingX** 技术详解
   * [stx-nfv project](sharing/starlingx/stx_nfv.md)
   * [stx-fault project](sharing/starlingx/stx_fault.md)
   * [stx-ha project](sharing/starlingx/stx_ha.md)
@@ -28,4 +28,7 @@
 
 ## Container
 
-*to be continued..*
+- Docker
+  - [AWS上 玩转Docker Machine](sharing/container/docker/Run_Docker_Machine_on_AWS)
+- Kubernetes
+  - *to be continued..*
