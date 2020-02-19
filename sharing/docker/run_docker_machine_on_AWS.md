@@ -1,4 +1,4 @@
-# AWS上 玩转Docker Machine
+# AWS上 部署Docker Machine
 
 Author: WingWJ
 
