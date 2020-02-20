@@ -1,7 +1,7 @@
 # 解决近期 Github 图片无法显示
 
-[^Author]: WingWJ
-[^ Date ]: 20th, Feb, 2020
+`Author: WingWJ`
+`Date: 20th, Feb, 2020`
 
 
 
