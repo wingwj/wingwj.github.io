@@ -7,29 +7,15 @@
 
 亡羊补牢，从此开始。
 
-<br />
+<br/>
 
-## 说明：关于近期文章图片无法显示
+### Tips
 
-Author: WingWJ
+[^ Updated At ]: 20th, Feb, 2020
 
-Date: 19th, Feb, 2020
+关于近期 **Github 图片无法显示** 的问题，请参考这篇[文章](sharing/tips/about_displayed_images.md)来解决。
 
-------
-
-近期Github 图片在墙内全部无法显示，导致各文章中的图片都没法查看了。。
-
-之前只是在自学容器时，发现 `raw.githbusercontent.com` 访问不了，得手动处理 yaml。
-
-去网上搜了下，说似乎是由于Github 托管在 新加坡AWS上 被波及了。
-
-我文章的图片是和文章一起，直接上传到Github 的。开始我以为只是把Github 本身的图片服务ban了，还专门去找了个第三方图床，想通过外链的方式来显示图片。整理完传上去试了下，发现图片还是挂（*注：可见柏林峰会那篇*）。。直接点图片链接进去，发现外链图片是通过 `camo.githubusercontent.com`  来中转的，所以问题依旧。。
-
-想了下，文章的话我还是会继续更新着。
-
-后续我再观察下，实在不行，可能得再找个地方来同步更新了。希望早日恢复吧～
-
-<br />
+<br/>
 
 ------
 
@@ -39,7 +25,7 @@ Date: 19th, Feb, 2020
 * [Keystone 多级配额研究](sharing/keystone_hierarchical_quota/keystone_hierarchical_quota.md)
 * [DevStack 安装配置遇到的坑](sharing/tips/DevStack_installing.md)
 
-<br />
+<br/>
 
 ## OpenStack
 
@@ -51,7 +37,7 @@ Date: 19th, Feb, 2020
   * [stx-ha project](sharing/starlingx/stx_ha.md)
   * *to be continued..*
 
-<br />
+<br/>
 
 ## Container
 
