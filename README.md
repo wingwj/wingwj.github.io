@@ -44,4 +44,4 @@
 - Docker
   - [AWS上 部署Docker Machine](sharing/docker/run_docker_machine_on_AWS.md)
 - Kubernetes
-  - *to be continued..*
+  - [一次 Kubernetes Service 问题排查](sharing/kubernetes/log_a_k8s_svc_issue.md)
