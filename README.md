@@ -11,9 +11,11 @@
 
 ## Tips
 
-`Update At: 20th, Feb, 2020`
+*Update At: 20th, Feb, 2020*
 
 关于近期 **Github 图片无法显示** 的问题，请参考这篇[文章](sharing/tips/about_displayed_images.md)来解决。
+
+P.S. `raw.githubusercontent.com` 无法下载的问题,，也可以一并解决哦～
 
 <br/>
 
