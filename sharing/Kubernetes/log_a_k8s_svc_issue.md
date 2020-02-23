@@ -52,7 +52,7 @@ Service 是Kubernetes 核心资源对象之一，个人甚至认为，**Service 
 
 整套物理环境构成，如下：
 
-<img src="https://s2.ax1x.com/2020/02/23/314Ild.png" alt="k8s-svc-000.png" style="zoom:50%;" />
+<img src="https://s2.ax1x.com/2020/02/23/314Hmt.png" alt="k8s-svc-000.png" style="zoom:50%;" />
 
 <br/>
 
@@ -80,7 +80,7 @@ Service 是Kubernetes 核心资源对象之一，个人甚至认为，**Service 
 
 出师不利啊。。
 
-
+<br/>
 
 #### 2. 环境确认
 
@@ -110,10 +110,9 @@ Flannel 由部署在各节点上的flanneld，通过vxlan 协议，为各个Pod 
 
    <img src="https://s2.ax1x.com/2020/02/23/3lYc0f.png" alt="k8s-svc-009.png" style="zoom:50%;" />
 
+看上去各节点都正常。那具体问题出在哪儿了呢？
 
-4. 看上去各节点都正常。那具体问题出在哪儿了呢？
-
-
+<br/>
 
 #### 3. 物理网络排查
 
@@ -137,9 +136,10 @@ Flannel 由部署在各节点上的flanneld，通过vxlan 协议，为各个Pod 
    ```
 
    <img src="https://s2.ax1x.com/2020/02/23/3lYfhQ.png" alt="k8s-svc-012.png" style="zoom:50%;" />
+   
+   重新试一下，还是不通。。
 
-4. 重新试一下，还是不通。。
-
+<br/>
 
 
 #### 4. 软件功能分析
@@ -152,14 +152,12 @@ Flannel 由部署在各节点上的flanneld，通过vxlan 协议，为各个Pod 
 
 2. 难道是 flanneld，用了其他网络么？想了想本环境，由于每个节点间，既要能相互访问，又要能够从外访问，所以使用的是 Host-Only + NAT 的双网卡模式——莫非，flanneld 用了那块NAT 的网卡，最后导致无法通信了？
 
-3. 去网上搜了下，flanneld 选择网卡的方式（http://www.sel.zju.edu.cn/?p=690，https://blog.csdn.net/qingyafan/article/details/93519196），确定其遵循的是以下规则：
+3. 去网上搜了下，看到了flanneld 选择网卡时，遵循的是以下规则：
 
-   ```
-   --iface="": interface to use (IP or name) for inter-host communication. Defaults to the interface for the default route on the machine. This can be specified multiple times to check each option in order. Returns the first match found.
+   > --iface="": interface to use (IP or name) for inter-host communication. Defaults to the interface for the default route on the machine. This can be specified multiple times to check each option in order. Returns the first match found.
+   >
+   > --iface-regex="": regex expression to match the first interface to use (IP or name) for inter-host communication. If unspecified, will default to the interface for the default route on the machine. This can be specified multiple times to check each regex in order. Returns the first match found. This option is superseded by the iface option and will only be used if nothing matches any option specified in the iface options.
    
-   --iface-regex="": regex expression to match the first interface to use (IP or name) for inter-host communication. If unspecified, will default to the interface for the default route on the machine. This can be specified multiple times to check each regex in order. Returns the first match found. This option is superseded by the iface option and will only be used if nothing matches any option specified in the iface options.
-   ```
-
    翻译一下：
 
    - 即如果指定了`--iface` 参数，则按指定的来；
@@ -172,11 +170,11 @@ Flannel 由部署在各节点上的flanneld，通过vxlan 协议，为各个Pod 
 
    <img src="https://s2.ax1x.com/2020/02/23/3lYIcn.png" alt="k8s-svc-015.png" style="zoom:50%;" />
 
- 
+
 
 OK，到这里，问题定位结束。
 
-
+<br/>
 
 #### 5. 解决问题
 
@@ -184,8 +182,9 @@ OK，到这里，问题定位结束。
 
 按上面的描述，**只需要让 flanneld 能选择到正确的网卡就行**。无非两种方案：
 
-1. 修改默认路由，将其对应到网卡 `enp0s3` 上；
-2. 修改 flanneld 配置，指定选用网卡 `enp0s3`。
+- 修改默认路由，将其对应到网卡 `enp0s3` 上；
+
+- 修改 flanneld 配置，指定选用网卡 `enp0s3`。
 
 这里<u>选用第二种方式</u>，毕竟是在学容器么，还是尽量用容器的方式来解决。：）
 
@@ -195,11 +194,17 @@ OK，到这里，问题定位结束。
 
 <img src="https://s2.ax1x.com/2020/02/23/3lYoXq.png" alt="k8s-svc-015.png" style="zoom:60%;" />
 
-找到当时部署时采用的 yaml文件。官方来源为：https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml，`wget` 下载后，在yaml 以下位置，用 `--iface` 来指定使用网卡 `enp03s`。（注：yaml 中有好几处需修改）
+下载当时部署时采用的 yaml 文件： 
+
+```
+wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+```
+
+之后修改yaml 文件的以下位置，添加 `--iface` 来指定使用网卡 `enp03s`。（注：yaml 中有好几处需修改）
 
 <img src="https://s2.ax1x.com/2020/02/23/3lY7n0.png" alt="k8s-svc-016.png" style="zoom:50%;" />
 
-*P.S. 由于DNS污染的原因，网址 `raw.githubusercontent.com` 无法访问，还同时还波及了Github 的图片服务。请参见我之前[文章](https://github.com/wingwj/wingwj.github.io/blob/master/sharing/tips/about_displayed_images.md)，可以在电脑端解决该问题。*
+*P.S. 由于DNS 污染的原因，网址 `raw.githubusercontent.com` 无法访问，还同时还波及了Github 的图片服务。请参见我之前[文章](https://github.com/wingwj/wingwj.github.io/blob/master/sharing/tips/about_displayed_images.md)，可以在电脑端解决该问题。*
 
 执行 `kubectl replace --force -f kube-flannel.yml`，重置所有 kube-flannel：
 
@@ -295,7 +300,7 @@ Service Cluster IP 是一个虚拟 IP，Kubernetes 通过节点上的 iptables �
 
 <img src="https://s2.ax1x.com/2020/02/23/314Ild.png" alt="k8s-svc-029.png" style="zoom:50%;" />
 
-通过上面的分析，我们能得到如下**<u>结论</u>**：
+通过上面的分析，我们能得到如下**结论**：
 
 - **iptables 将访问 Service 的流量转发到后端 Pod，而且使用了类似轮询的负载均衡策略**。
 
