@@ -1,9 +1,11 @@
 # Summary
-从2011年在云计算领域从业，至今已近10年。
+从 2011 年在云计算领域从业，至今已近 10 年。
 
-从AWS，Eucalyptus，VMware，到从Diablo 版本起我从业最久的OpenStack，见证了一个个项目从起步，到成熟，到逐渐退潮。整个过程中遇到和解决了各种问题，但之前却从未记录分享出来。
+从 AWS、Eucalyptus、VMware，到自从 Diablo 版本（2011年）起 就深度参与其中的 OpenStack，见证了一个个项目从起步、到成熟，到逐渐退潮。近些年，容器技术随着 Docker、Swarm 的逐渐火热，尤其是近些年的 Kuberenetes，相关技术领域一直在进行着不断的变更，从未停歇。作为技术人，需要逐步更新自己的知识储备。
 
-近些年，随着Docker，Swarm，尤其是近些年的Kuberenetes，相关技术领域一直在进行着不断的变更，从未停歇。作为技术人，需要逐步更新自己的知识储备。写技术博客，也是个精炼的过程。
+这一路走来，遇到和解决了不少问题。但囿于各种条件，之前却从未有机会分享出来。
+
+写技术博客，是个知识精炼的过程。
 
 亡羊补牢，从此开始。
 
@@ -47,3 +49,4 @@ P.S. `raw.githubusercontent.com` 无法下载的问题,，也可以一并解决�
   - [AWS上 部署Docker Machine](sharing/docker/run_docker_machine_on_AWS.md)
 - Kubernetes
   - [一次 Kubernetes Service 问题排查](sharing/kubernetes/log_a_k8s_svc_issue.md)
+  - [Kubernetes 三节点搭建指导（墙内专供版。。）](sharing/kubernetes/k8s_3nodes_installation_on_virtualbox.md)
