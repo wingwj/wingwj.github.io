@@ -1,7 +1,7 @@
 # Summary
 从 2011 年在云计算领域从业，至今已近 10 年。
 
-从 AWS、Eucalyptus、VMware，到自从 Diablo 版本（2011年）起 就深度参与其中的 OpenStack，见证了一个个项目从起步、到成熟，到逐渐退潮。近些年，容器技术随着 Docker、Swarm 的逐渐火热，尤其是近些年的 Kuberenetes，相关技术领域一直在进行着不断的变更，从未停歇。作为技术人，需要逐步更新自己的知识储备。
+从 AWS、Eucalyptus、VMware，到自从 Diablo 版本（2011 年）起 就深度参与其中的 OpenStack，见证了一个个项目从起步、到成熟，到逐渐退潮。近些年，容器技术随着 Docker、Swarm 的逐渐火热，尤其是近些年的 Kuberenetes，相关技术领域一直在进行着不断的变更，从未停歇。作为技术人，需要逐步更新自己的知识储备。
 
 这一路走来，遇到和解决了不少问题。但囿于各种条件，之前却从未有机会分享出来。
 
@@ -25,7 +25,7 @@ P.S. `raw.githubusercontent.com` 无法下载的问题,，也可以一并解决�
 
 
 ## Legacy
-* [Keystone 多级租户研究-Mitaka版本](sharing/keystone_hierarchical_projects/FAR_for_keystone_hierarchical_projects.md)
+* [Keystone 多级租户研究 (Mitaka)](sharing/keystone_hierarchical_projects/FAR_for_keystone_hierarchical_projects.md)
 * [Keystone 多级配额研究](sharing/keystone_hierarchical_quota/keystone_hierarchical_quota.md)
 * [DevStack 安装配置遇到的坑](sharing/tips/DevStack_installing.md)
 
@@ -45,8 +45,11 @@ P.S. `raw.githubusercontent.com` 无法下载的问题,，也可以一并解决�
 
 ## Container
 
+- Basic
+  - [为什么推荐在 AWS 上实践容器](sharing/tips/why_i_recommend_practicing_container_on_AWS.md)
+
 - Docker
-  - [AWS上 部署Docker Machine](sharing/docker/run_docker_machine_on_AWS.md)
+  - [AWS 上 部署 Docker Machine](sharing/docker/run_docker_machine_on_AWS.md)
 - Kubernetes
   - [一次 Kubernetes Service 问题排查](sharing/kubernetes/log_a_k8s_svc_issue.md)
   - [Kubernetes 三节点搭建指导（墙内专供版。。）](sharing/kubernetes/k8s_3nodes_installation_on_virtualbox.md)
