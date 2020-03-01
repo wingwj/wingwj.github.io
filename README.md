@@ -53,3 +53,10 @@ P.S. `raw.githubusercontent.com` 无法下载的问题,，也可以一并解决�
 - Kubernetes
   - [一次 Kubernetes Service 问题排查](sharing/kubernetes/log_a_k8s_svc_issue.md)
   - [Kubernetes 三节点搭建指导（墙内专供版。。）](sharing/kubernetes/k8s_3nodes_installation_on_virtualbox.md)
+
+<br/>
+
+## Tech & Life
+
+- [取名的灵感：记录我的第一个爬虫程序](sharing/tech_and_life/naming_inspiration.md)
+
