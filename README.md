@@ -45,6 +45,7 @@ P.S. `raw.githubusercontent.com` 无法下载的问题,，也可以一并解决�
   * [stx-fault project](sharing/starlingx/stx_fault.md)
   * [stx-ha project](sharing/starlingx/stx_ha.md)
   * *to be continued..*
+* ***Updated at 2nd, Dec, 2020*:** [Neutron 对象关系图](sharing/neutron_rmap/Neutron_RMap.md)
 
 <br/>
 
@@ -56,7 +57,7 @@ P.S. `raw.githubusercontent.com` 无法下载的问题,，也可以一并解决�
 - Docker
   - [AWS 上 部署 Docker Machine](sharing/docker/run_docker_machine_on_AWS.md)
 - Kubernetes
-  - [Kubernetes 三节点搭建指导（墙内专供版。。）](sharing/kubernetes/k8s_3nodes_installation_on_virtualbox.md)
+  - [Kubernetes 三节点搭建指导（墙内专供版）](sharing/kubernetes/k8s_3nodes_installation_on_virtualbox.md)
   - [一次 Kubernetes Service 问题排查](sharing/kubernetes/log_a_k8s_svc_issue.md)
 
 <br/>
