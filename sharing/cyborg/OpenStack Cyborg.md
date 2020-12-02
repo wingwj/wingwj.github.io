@@ -96,41 +96,41 @@ Cyborg最终在OpenStack Queen版本中首次正式发布。
 
 以下大致罗列下各进程功能。注意，部分功能还未全部实现：
 
--   cyborg-api：与其他OpenStack API服务一样，提供服务入口。与cyborg-agent及cyborg-db通过cyborg-conductor服务交互；
+- cyborg-api：与其他OpenStack API服务一样，提供服务入口。与cyborg-agent及cyborg-db通过cyborg-conductor服务交互；
 
--   cyborg-conductor：类似nova-conductor。用于协调cyborg-api和cyborg-agent之间的交互与数据库访问；
+- cyborg-conductor：类似nova-conductor。用于协调cyborg-api和cyborg-agent之间的交互与数据库访问；
 
--   cyborg-agent：类似nova-compute，主机上任务的实际执行者，通过Cyborg Driver与加速器后端进行交互，主要完成四部分工作，如下所示。此外，该进程还负责与Nova placement服务的通信。
+- cyborg-agent：类似nova-compute，主机上任务的实际执行者，通过Cyborg Driver与加速器后端进行交互，主要完成四部分工作，如下所示。此外，该进程还负责与Nova placement服务的通信。
 
-    -   数据上报：向Cyborg服务器报告有关可用加速器，状态和利用率的数据
+  -   数据上报：向Cyborg服务器报告有关可用加速器，状态和利用率的数据
 
-    -   硬件发现：每隔数秒就会扫描实例的加速器和现有加速器的使用级别，并将这些信息通过心跳消息报告给Cyborg服务器，以帮助管理调度加速器
+  -   硬件发现：每隔数秒就会扫描实例的加速器和现有加速器的使用级别，并将这些信息通过心跳消息报告给Cyborg服务器，以帮助管理调度加速器
 
-    -   硬件管理：管理安装驱动程序，依赖关系和卸载驱动。计划通过Ansible将用于管理每个加速器的配置文件和加速器的Driver。install和uninstall特定的ansible playbook适配Cyborg所支持的硬件。在管理的硬件上进行的配置更改将通过运行不同配置的playbook作为底层实现
+  -   硬件管理：管理安装驱动程序，依赖关系和卸载驱动。计划通过Ansible将用于管理每个加速器的配置文件和加速器的Driver。install和uninstall特定的ansible playbook适配Cyborg所支持的硬件。在管理的硬件上进行的配置更改将通过运行不同配置的playbook作为底层实现
 
-    -   连接实例：一旦产生一个实例需要连接到主机上的特定加速器，Cyborg服务器将向Cyborg agent发送消息。由于不同加速器之间的连接方法不同，因此agent需要不同的driver提供连接功能
+  -   连接实例：一旦产生一个实例需要连接到主机上的特定加速器，Cyborg服务器将向Cyborg agent发送消息。由于不同加速器之间的连接方法不同，因此agent需要不同的driver提供连接功能
 
--   cyborg-generic-driver：一种通用的多功能驱动程序，具有任何加速器都具有的通用功能集。从master代码分支上来看, 目前只支持对SPDK和FPGA设备的操作
+- cyborg-generic-driver：一种通用的多功能驱动程序，具有任何加速器都具有的通用功能集。从master代码分支上来看, 目前只支持对SPDK和FPGA设备的操作
 
-    -   展开来说，该服务主要负责完成以下功能：
+  - 展开来说，该服务主要负责完成以下功能：
 
-        -   识别和发现附加的加速器后端
+    -   识别和发现附加的加速器后端
 
-        -   列出在后端运行的服务
+    -   列出在后端运行的服务
 
-        -   将加速器挂载（Attach）到通用后端
+    -   将加速器挂载（Attach）到通用后端
 
-        -   从通用后端卸载（Detach）加速器
+    -   从通用后端卸载（Detach）加速器
 
-        -   列出附加到通用后端的加速器
+    -   列出附加到通用后端的加速器
 
-        -   修改附加到通用后端的加速器
+    -   修改附加到通用后端的加速器
 
-    -   当前master代码示例如下：
+  - 当前master代码示例如下：
 
-        ```
-        standard_interfaces = ('discover', 'list', 'update', 'attach', 'detach')
-        ```
+    ```
+    standard_interfaces = ('discover', 'list', 'update', 'attach', 'detach')
+    ```
 
 
 -   cyborg-db：与其他组件一致的RDS。
@@ -361,5 +361,4 @@ class Deployable(Base):
 -   Codes：[*https://review.openstack.org/\#/q/project:openstack/cyborg*](https://review.openstack.org/#/q/project:openstack/cyborg)
 
 -   Summit：[*https://www.openstack.org/videos/search?search=cyborg*](https://www.openstack.org/videos/search?search=cyborg)
-
 
