@@ -132,8 +132,7 @@ Cyborg最终在OpenStack Queen版本中首次正式发布。
     standard_interfaces = ('discover', 'list', 'update', 'attach', 'detach')
     ```
 
-
--   cyborg-db：与其他组件一致的RDS。
+- cyborg-db：与其他组件一致的RDS。
 
 ### 2.4 部署形态
 
