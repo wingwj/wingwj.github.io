@@ -45,7 +45,7 @@ P.S. `raw.githubusercontent.com` 无法下载的问题,，也可以一并解决�
   * [stx-fault project](sharing/starlingx/stx_fault.md)
   * [stx-ha project](sharing/starlingx/stx_ha.md)
   * *to be continued..*
-* ***Updated at 2nd, Dec, 2020*:** [Neutron 对象关系图](sharing/neutron_rmap/Neutron_RMap.md)
+* [Neutron 对象关系图](sharing/neutron_rmap/Neutron_RMap.md)   ***Updated at 2nd, Dec, 2020***
 
 <br/>
 
@@ -65,4 +65,5 @@ P.S. `raw.githubusercontent.com` 无法下载的问题,，也可以一并解决�
 ## Tech & Life
 
 - [取名的灵感：记录我的第一个爬虫程序](sharing/tech_and_life/naming_inspiration.md)
+- [简记：一次 github.io 页面中文乱码的解决过程](sharing/tech_and_life/garbled_resolution_process_of_githubio.md)   ***Updated at 3rd, Dec, 2020*:**
 
