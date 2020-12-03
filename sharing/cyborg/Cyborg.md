@@ -2,15 +2,15 @@
 
 Author: WingWJ
 
-Date: 7th, January, 2019
+Date: 7th, Jan, 2019
 
 Version: Rocky
 
-
+<br/>
 
 ## 1. 概述
 
-
+<br/>
 
 ### 1.1 背景
 
@@ -47,11 +47,11 @@ Cyborg项目就是应对这些对硬件加速设备的管理而应运而生。�
 
 在体会了当前使用GPU的种种不易之后，让我们看看Cyborg的玩法。
 
-
+<br/>
 
 ## 2. Cyborg 技术解析
 
-
+<br/>
 
 ### 2.1 项目起源
 
@@ -236,11 +236,11 @@ class Deployable(Base):
                             nullable=False)
 ```
 
-
+<br/>
 
 ## 3. Cyborg 项目展望
 
-
+<br/>
 
 ### 3.1 架构演进
 
@@ -284,9 +284,11 @@ class Deployable(Base):
 
 ![](images/cyborg_13.png)
 
-
+<br/>
 
 ## 4. Cyborg 社区分析
+
+<br/>
 
 ### 4.1 近期动态
 
@@ -310,13 +312,13 @@ class Deployable(Base):
 
 ![](images/cyborg_17.png)
 
-
+<br/>
 
 ## 5. Cyborg 价值评估
 
 当前项目暂不成熟，整体代码量也不大，项目使用与运维所必须的CLI、portal、文档等配套资源也都暂不成熟，目前与Nova的整合也尚未完成（计划在Stein实现）。部分特性暂时处于画饼状态。。近期社区贡献度也有所下滑（可能也和临近新年有关）。不过我觉得该项目前景不错，后续也会继续研究下。结合当前越来越多的加速器场景诉求，也希望Cyborg能吸引到更多的人/厂家投入。
 
-
+<br/>
 
 ## 附录
 

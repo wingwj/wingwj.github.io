@@ -2,9 +2,9 @@
 
 Author: WingWJ
 
-Date: 3rd, December, 2020
+Date: 3rd, Dec, 2020
 
-
+<br/>
 
 昨晚偶然点开了自己的 github.io [页面](https://wingwj.github.io)，意外发现有个页面显示的全是乱码。。
 
@@ -30,11 +30,11 @@ Date: 3rd, December, 2020
 
 所以，重新提交，修改原 md 命名去掉空格后，重新提交，问题修复，[页面](https://wingwj.github.io/sharing/cyborg/Cyborg.html)已可正常访问。
 
-
+<br/>
 
 以上，是最近碰到的一个诡异问题。发出来分享下，也希望对其他人有帮助～
 
-
+<br/>
 
 P.S. github.io 这个网址非常不稳定，墙内有时能访问有时访问不了，纯看心情。。
 

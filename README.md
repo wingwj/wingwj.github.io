@@ -65,5 +65,5 @@ P.S. `raw.githubusercontent.com` 无法下载的问题,，也可以一并解决�
 ## Tech & Life
 
 - [取名的灵感：记录我的第一个爬虫程序](sharing/tech_and_life/naming_inspiration.md)
-- [简记：一次 github.io 页面中文乱码的解决过程](sharing/tech_and_life/garbled_resolution_process_of_githubio.md)   ***Updated at 3rd, Dec, 2020*:**
+- [简记：一次 github.io 页面中文乱码的解决过程](sharing/tech_and_life/garbled_resolution_process_of_githubio.md)   ***Updated at 3rd, Dec, 2020***
 

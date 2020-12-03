@@ -2,7 +2,7 @@
 
 Author: WingWJ
 
-Date: 2nd, December, 2020
+Date: 2nd, Dec, 2020
 
 <br/>
 
