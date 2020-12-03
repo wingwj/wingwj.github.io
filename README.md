@@ -37,8 +37,7 @@ P.S. `raw.githubusercontent.com` 无法下载的问题,，也可以一并解决�
 
 ## OpenStack
 
-* [Cyborg 项目解析](sharing/cyborg/OpenStack%20Cyborg.md)
-* [Cyborg 项目解析 new](sharing/cyborg/Cyborg.md)
+* [Cyborg 项目解析](sharing/cyborg/Cyborg.md)
 * [补遗：柏林峰会 观感总结](sharing/berlin_summit/OpenStack_Berlin_Summit.md)
 * [补遗：柏林峰会，背后的技术故事](sharing/berlin_summit/behind_berlin_speech.md)
 * 边缘计算相关：**StarlingX** 技术详解
