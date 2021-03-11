@@ -18,7 +18,7 @@ Date: 10th, Mar, 2021
 * **Password**：密码，比如一段文本
 * **SSH Keys**：SSH 密钥
 
-这些，后续会对应到Barbican中具体的参数 secret_type，放后面说。
+这些，后续会对应到Barbican中具体的参数 `secret_type`，放后面说。
 
 <br/>
 
@@ -32,6 +32,8 @@ Date: 10th, Mar, 2021
 
 <img src="https://s3.ax1x.com/2021/03/11/6t19qH.png" alt="barbican_101.png" />
 
+
+
 可见，我们除了密文内容外，其余参数均未指定。由上面结果可以看出来，Barbican 默认识别密文内容 `wj_pass=abc123` 为文本格式 `text/plain`，再采用 AES-256 算法，以`opaque`格式将其保存到Barbican中，且永不过期。
 
 P.S. `payload`字段其实并未限制你必须使用 `key=value`的形式，把它就当个字符串形式，想存啥写啥就好。比如，通过额外指定`-name`参数来给 Secret 添加名字来区分，只存`payload=abc123`也没问题——不过，有时我们可能连提示项都不想被人看到呢，这样直接都写在`payload`里是更合适的——这完全取决于自身的用法。
@@ -44,9 +46,13 @@ P.S. `payload`字段其实并未限制你必须使用 `key=value`的形式，把
 
 <img src="https://s3.ax1x.com/2021/03/11/6t1SMD.png" alt="barbican_102.png" />
 
+
+
 注意，如果不指定`--payload`，则查询出来的结果，会和创建时返回的结构体一致，默认隐去 `payload`字段（因为CLI 的封装）。如下：
 
 <img src="https://s3.ax1x.com/2021/03/11/6t1FII.png" alt="barbican_103.png" />
+
+
 
 <br/>
 
@@ -55,12 +61,18 @@ P.S. `payload`字段其实并未限制你必须使用 `key=value`的形式，把
 先使用`openssl`命令，创建一对RSA公私钥，再使用base64 进行编码，记录编码结果：
 <img src="https://s3.ax1x.com/2021/03/11/6t1Zz8.png" alt="barbican_104.png" />
 
+
+
 这里我们同样使用之前的命令来将证书存储到Barbican中，这次，我们需要相应的指定多个参数，与创建公私钥时的命令保持一致：
 <img src="https://s3.ax1x.com/2021/03/11/6t1pse.png" alt="barbican_105.png" />
+
+
 
 可见，在创建完后使用再查询，能够明确看到Barbican返回结果，是具备PEM header/footer 的X.509格式公钥。
 和原始 `public.pem` 进行比对，确实是一致的：
 <img src="https://s3.ax1x.com/2021/03/11/6t1Ait.png" alt="barbican_106.png" />
+
+
 
 由上文可以看到，我们指定了该 Secret 的名称，并且对应证书生成时的命令，明确该 Secret 由RSA算法生成且密钥长度为2048，使用了base64方式编码，以原始二进制方式为密文内容，存储到了Barbican中。
 
@@ -72,6 +84,8 @@ P.S. `payload`字段其实并未限制你必须使用 `key=value`的形式，把
 答案是，能。
 <img src="https://s3.ax1x.com/2021/03/11/6t1VRf.png" alt="barbican_107.png" />
 
+
+
 可见，查询出来的结果就是已经过base64编码后的原文，或者换句话说，是原始`$pub_base64`参数中存储的内容。即，这里直接将编码后内容作为文本，直接存储到了Barbican中。
 
 <br/>
@@ -80,12 +94,16 @@ P.S. `payload`字段其实并未限制你必须使用 `key=value`的形式，把
 当然可以。因为从Barbican中获取到的结果，即原来的编码后内容，那么使用同样的方法解码，自然能够获取。
 <img src="https://s3.ax1x.com/2021/03/11/6t1EJP.png" alt="barbican_108.png" />
 
+
+
 <br/>
 
 ### 3.3 那假如指定使用了base64，但是加密算法随便写为AES-256，还能成功么？
 
 答案是，不能，参数不匹配。
 <img src="https://s3.ax1x.com/2021/03/11/6t1mQS.png" alt="barbican_109.png" />
+
+
 
 <br/>
 
@@ -112,6 +130,8 @@ Barbican本身并不会校验 Secret 内容本身与填入算法是否匹配（�
 考虑正确性与便利性，在存储 Secret 时应该指定正确的参数。
 <img src="https://s3.ax1x.com/2021/03/11/6t1nsg.png" alt="barbican_110.png" />
 
+
+
 <br/>
 
 ## 4. 看明白了，存证书这里还是挺有用的。回头看，在Barbican中单独保存密码，又有多大用呢？
@@ -120,6 +140,7 @@ Barbican本身并不会校验 Secret 内容本身与填入算法是否匹配（�
 
 如果在使用`openssl` 创建密钥时，指定`-aes256`参数，就会将私钥进行加密，此时就会让你输入私钥密码，比如我们还用 `abc123`，最后就会生成一个经过AES-256加密后的私钥：
 <img src="https://s3.ax1x.com/2021/03/11/6t1uLQ.png" alt="barbican_111.png" />
+
 而刚生成时键入的密码，我们就得自己记录下来。这时，就可以通过Barbican来记录。此外，把私钥密码和公钥，甚至私钥，全都存储到Barbican中是允许的。只是都放到一个篮子里，是否安全，就是要考虑的另一个问题了。。
 
 当然，你也可以通过Barbican，来记录某人生日、爱好、偶尔的灵感、甚至写日记。。完全看你的用法了 ：）～
@@ -130,6 +151,9 @@ Barbican本身并不会校验 Secret 内容本身与填入算法是否匹配（�
 
 准确来说，Barbican是以OpenStack Keystone实现的RBAC 来进行权限管控的。它能够保证它自身记录的保密性，比如DB中记录，那自然是加密存储的。只有正确权限的用户，才有权查看Barbican中用户记录的内容。
 <img src="https://s3.ax1x.com/2021/03/11/6t1MZj.png" alt="barbican_112.png" style="zoom:50%;" />
+
+
+
 而显而易见的是，如果用户泄漏了个人鉴别信息，非法用户使用窃取到的用户信息顺利通过了 Keystone鉴权而获得了合法身份，那么Barbican处 也无法保证记录的信息不被获取。即个人信息与Keystone的安全性，会影响到整个OpenStack平台本身的安全性。
 
 以上，是对Barbican的初步解析，先有个印象它大概是怎么用的，后续才好学习其实现原理部分。
