@@ -56,6 +56,16 @@ P.S. `payload`字段其实并未限制你必须使用 `key=value`的形式，把
 
 <br/>
 
+### 2.3 Secret 能重名么？
+
+当然可以，唯一键为UUID。如下：
+
+<img src="https://z3.ax1x.com/2021/03/24/6HXmH1.png" alt="barbican_113.png" />
+
+
+
+<br/>
+
 ## 3. OK，存密码这种我明白了。那其他类型 Secret 怎么存呢？
 那我们来看下，用的最多的密钥方式吧，我们计划将一公钥倒入到Barbican中。
 先使用`openssl`命令，创建一对RSA公私钥，再使用base64 进行编码，记录编码结果：
