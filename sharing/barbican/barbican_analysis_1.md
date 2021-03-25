@@ -69,17 +69,20 @@ P.S. `payload`字段其实并未限制你必须使用 `key=value`的形式，把
 ## 3. OK，存密码这种我明白了。那其他类型 Secret 怎么存呢？
 那我们来看下，用的最多的密钥方式吧，我们计划将一公钥倒入到Barbican中。
 先使用`openssl`命令，创建一对RSA公私钥，再使用base64 进行编码，记录编码结果：
+
 <img src="https://s3.ax1x.com/2021/03/11/6t1Zz8.png" alt="barbican_104.png" />
 
 
 
 这里我们同样使用之前的命令来将证书存储到Barbican中，这次，我们需要相应的指定多个参数，与创建公私钥时的命令保持一致：
+
 <img src="https://s3.ax1x.com/2021/03/11/6t1pse.png" alt="barbican_105.png" />
 
 
 
 可见，在创建完后使用再查询，能够明确看到Barbican返回结果，是具备PEM header/footer 的X.509格式公钥。
 和原始 `public.pem` 进行比对，确实是一致的：
+
 <img src="https://s3.ax1x.com/2021/03/11/6t1Ait.png" alt="barbican_106.png" />
 
 
@@ -92,6 +95,7 @@ P.S. `payload`字段其实并未限制你必须使用 `key=value`的形式，把
 我们还是用例子来说话。
 还是上文生成的已经base64编码过的公钥，我按文本方式`text/plain` 在存入Barbican时将算法改为 AES-256，还不指定base64，能存储成功么？
 答案是，能。
+
 <img src="https://s3.ax1x.com/2021/03/11/6t1VRf.png" alt="barbican_107.png" />
 
 
@@ -102,6 +106,7 @@ P.S. `payload`字段其实并未限制你必须使用 `key=value`的形式，把
 
 ### 3.2 如果此时，我自己手动在用base64解码，能拿到原始公钥么？
 当然可以。因为从Barbican中获取到的结果，即原来的编码后内容，那么使用同样的方法解码，自然能够获取。
+
 <img src="https://s3.ax1x.com/2021/03/11/6t1EJP.png" alt="barbican_108.png" />
 
 
@@ -111,6 +116,7 @@ P.S. `payload`字段其实并未限制你必须使用 `key=value`的形式，把
 ### 3.3 那假如指定使用了base64，但是加密算法随便写为AES-256，还能成功么？
 
 答案是，不能，参数不匹配。
+
 <img src="https://s3.ax1x.com/2021/03/11/6t1mQS.png" alt="barbican_109.png" />
 
 
@@ -138,6 +144,7 @@ P.S. `payload`字段其实并未限制你必须使用 `key=value`的形式，把
 Barbican本身并不会校验 Secret 内容本身与填入算法是否匹配（如上例中的RSA改为AES），在入库时只是按照传入参数来存储，而在查询时按照之前记录的方式来响应（如编解码）。
 
 考虑正确性与便利性，在存储 Secret 时应该指定正确的参数。
+
 <img src="https://s3.ax1x.com/2021/03/11/6t1nsg.png" alt="barbican_110.png" />
 
 
@@ -149,6 +156,7 @@ Barbican本身并不会校验 Secret 内容本身与填入算法是否匹配（�
 比如，还以上文RSA私钥来举例。之前我们生成时使用的命令中，由于并未指定加密方式，因此生成的私钥是明文的：
 
 如果在使用`openssl` 创建密钥时，指定`-aes256`参数，就会将私钥进行加密，此时就会让你输入私钥密码，比如我们还用 `abc123`，最后就会生成一个经过AES-256加密后的私钥：
+
 <img src="https://s3.ax1x.com/2021/03/11/6t1uLQ.png" alt="barbican_111.png" />
 
 而刚生成时键入的密码，我们就得自己记录下来。这时，就可以通过Barbican来记录。此外，把私钥密码和公钥，甚至私钥，全都存储到Barbican中是允许的。只是都放到一个篮子里，是否安全，就是要考虑的另一个问题了。。
@@ -160,6 +168,7 @@ Barbican本身并不会校验 Secret 内容本身与填入算法是否匹配（�
 ## 5. 说到这了，Barbican中的记录真的安全么？
 
 准确来说，Barbican是以OpenStack Keystone实现的RBAC 来进行权限管控的。它能够保证它自身记录的保密性，比如DB中记录，那自然是加密存储的。只有正确权限的用户，才有权查看Barbican中用户记录的内容。
+
 <img src="https://s3.ax1x.com/2021/03/11/6t1MZj.png" alt="barbican_112.png" style="zoom:50%;" />
 
 
