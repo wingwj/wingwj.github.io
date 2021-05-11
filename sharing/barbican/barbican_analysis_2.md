@@ -106,3 +106,23 @@ Barbican提供的是一种通用服务，我按照使用方式来理（xi）解�
 此外，没有了。。Nova中的这部分能力就是仅用于虚拟机访问的，无法独立出来提供给其他服务使用（也不应该）。所以，这也算是Barbican诞生的一个原因吧。
 
 <br/>
+
+## 3. 总结下，Barbican与OpenStack其他组件的交互情况：
+
+随着组件发展，Barbican 也逐步其他 OpenStack 组件进行了部分功能融合。把上文提到的证书使用情况，也放在一起统计，主要体现在以下几部分：
+
+- Nova：暂态卷（*Ephemeral disk*）加密。用的不多
+
+- Cinder：加密卷。与 Nova 配合，通过卷类型来实现的前端加密。有用
+- Glance：镜像签名。需要在镜像上传前准备，能有效防止被篡改；但无法防止上传后被篡改的场景
+
+- Octavia：提供 TLS终结 HTTPS LB
+- Swift：使用对称密钥来加密 Swift 容器
+
+- Sahara：没用过。不乱解释。。
+
+- Magnum：可为 K8s 提供TLS证书
+
+官网[安全文档](https://docs.openstack.org/security-guide/secrets-management/secrets-management-use-cases.html)中提供了对以上各方式的详细使用指导，感兴趣可以直接查看。
+
+<br/>
