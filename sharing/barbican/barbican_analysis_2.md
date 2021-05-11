@@ -4,6 +4,8 @@ Author: WingWJ
 
 Date: 24th, Mar, 2021
 
+Updated at: 11th, May, 2021
+
 <br/>
 
 ## 1. 关于证书
@@ -109,7 +111,7 @@ Barbican提供的是一种通用服务，我按照使用方式来理（xi）解�
 
 ## 3. 总结下，Barbican与OpenStack其他组件的交互情况：
 
-随着组件发展，Barbican 也逐步其他 OpenStack 组件进行了部分功能融合。把上文提到的证书使用情况，也放在一起统计，主要体现在以下几部分：
+随着组件发展，Barbican 也逐步与其他 OpenStack 组件实现了功能融合。这里把上文提到的证书使用情况，也放在一起统计，主要体现在以下几部分：
 
 - Nova：暂态卷（*Ephemeral disk*）加密。用的不多
 
