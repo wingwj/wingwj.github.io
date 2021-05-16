@@ -4,112 +4,174 @@ Author: WingWJ
 
 Date: 24th, Mar, 2021
 
-Updated at: 11th, May, 2021
+Updated at: 16th, May, 2021
 
 <br/>
 
-## 1. 关于证书
+## 引子
 
-上一篇，我们了解了Barbican中最基本的用法。这一篇，我们重点关注下Barbican中证书的相关用法。
-
-证书（Certificate）在Barbican使用中，比简单的密码（Password）用法更复杂。上一节中，我们展示了如何创建证书。这一节，我们结合证书的常见使用，来考察下Barbican提供的能力。
+上一篇，我们了解了 Barbican 中最基本的用法。这一篇，我们通过考察其中证书的相关用法，来感受下 Barbican 提供的其他能力。
 
 <br/>
 
-### 1.1 支持设置证书过期时间么？
+## 1. Secret 有效期
 
-支持。在创建和更新时，通过`--expiration`参数来指定，格式遵循ISO 8601格式。比如，当前时间为2021年3月22日16点12分46秒，即可使用如下格式：
+说到证书，除了它本身提供的身份鉴别属性外，还有另一个属性也不容轻视，即有效期。不同于人类社会中的各类资质类证书，一旦获取终身有效。由于 IT 系统以及人员的变动性，为了系统安全，必需要设置可靠的定期更迭的验证方式。试想一下，如果有人持有永久登陆系统的有效凭证，这对整个系统来说就是巨大的风险。
 
-- 形如`20210322T161246+08`，注意时区；
-- 当然，也可直接使用换算后的 UTC时间，即`20210322T081246`）；
+在 Barbican 设计时，当然也考虑到了这一点。下面我们会用几个具体例子，来考察下 Barbican 中的有效期设置。
+
+<br/>
+
+### 1.1 如何设置过期时间？
+
+在创建和更新 Secret 时，通过`--expiration` 参数（简写为 `-x`）来指定，格式遵循 ISO 8601格式。比如，当前时间为：2021年5月16日20点59分34秒，即可使用如下格式：
+
+- 形如 `20210516T205934+08`，注意时区；
+- 当然，也可直接使用换算后的 UTC时间，即 `20210516T205934`）；
 - 注意：API文档中指定的格式为：`YYYY-MM-DDTHH:MM:SSZ`。
 
 在环境上实验下，如果指定错了会怎么样：
 
-<img src="https://z3.ax1x.com/2021/03/24/6HXZu9.png" alt="barbican_201.png" />
+```
+[root@cdpm03 opadmin]# date
+Sun May 16 20:59:34 CST 2021
+[root@cdpm03 opadmin]#
+[root@cdpm03 opadmin]# openstack secret store -n wj_expr -x 20210516T165900+08
+4xx Client error: Bad Request: Provided object does not match schema 'Secret': 'expiration' is before current time. Invalid property: 'expiration'
+Bad Request: Provided object does not match schema 'Secret': 'expiration' is before current time. Invalid property: 'expiration'
+```
 
 可见，当设置的超时时间早于当前时间，Secret 会直接创建失败。
 
 <br/>
 
-### 1.2 证书过期后，会有什么表现？
+### 1.2 过期后，会有什么表现？
 
 我们直接在环境上操作，比较直观。这里先创建一个 Secret，然后将过期时间设置的很近。如下：
 
-<img src="https://z3.ax1x.com/2021/03/24/6HXuAx.png" alt="barbican_202.png" />
+```
+[root@cdpm03 opadmin]# date
+Sun May 16 21:00:28 CST 2021
+[root@cdpm03 opadmin]# openstack secret store -n wj_expr -x 20210516T210200+08
++---------------+---------------------------------------------------------------------------+
+| Field         | Value                                                                     |
++---------------+---------------------------------------------------------------------------+
+| Secret href   | https://10.127.3.110:9311/v1/secrets/3fa6b963-1bba-4c2b-8033-25446a2ffbfc |
+| Name          | wj_expr                                                                   |
+| Created       | None                                                                      |
+| Status        | None                                                                      |
+| Content types | None                                                                      |
+| Algorithm     | aes                                                                       |
+| Bit length    | 256                                                                       |
+| Secret type   | opaque                                                                    |
+| Mode          | cbc                                                                       |
+| Expiration    | 2021-05-16T21:02:00+08:00                                                 |
++---------------+---------------------------------------------------------------------------+
+[root@cdpm03 opadmin]# openstack secret get https://10.127.3.110:9311/v1/secrets/3fa6b963-1bba-4c2b-8033-25446a2ffbfc
++---------------+---------------------------------------------------------------------------+
+| Field         | Value                                                                     |
++---------------+---------------------------------------------------------------------------+
+| Secret href   | https://10.127.3.110:9311/v1/secrets/3fa6b963-1bba-4c2b-8033-25446a2ffbfc |
+| Name          | wj_expr                                                                   |
+| Created       | 2021-05-16T13:00:56+00:00                                                 |
+| Status        | ACTIVE                                                                    |
+| Content types | None                                                                      |
+| Algorithm     | aes                                                                       |
+| Bit length    | 256                                                                       |
+| Secret type   | opaque                                                                    |
+| Mode          | cbc                                                                       |
+| Expiration    | 2021-05-16T13:02:00+00:00                                                 |
++---------------+---------------------------------------------------------------------------+
+```
 
 如上图，Secret 已经创建完毕，且还有不到两分钟过期。等它过期后，再重新执行下查询操作，看看会发生什么：
 
-<img src="https://z3.ax1x.com/2021/03/24/6HXEjJ.png" alt="barbican_203.png" />
+```
+[root@cdpm03 opadmin]# date
+Sun May 16 21:02:14 CST 2021
+[root@cdpm03 opadmin]#
+[root@cdpm03 opadmin]# openstack secret get https://10.127.3.110:9311/v1/secrets/3fa6b963-1bba-4c2b-8033-25446a2ffbfc
+4xx Client error: Not Found: Not Found. Sorry but your secret is in another castle.
+Not Found: Not Found. Sorry but your secret is in another castle.
+```
 
 可见，证书过期后会，Secret 查询会直接提示找不到。
 
-我们去DB中看下证书的具体状态，可见，证书仍为 Active状态——即不会显式更改为`Expired` 状态！
+我们去 DB 中看下证书的具体状态，可见，证书仍为 `Active` 状态——即不会显式更改为`Expired` 状态！
 
-<img src="https://z3.ax1x.com/2021/03/24/6HXeBR.png" alt="barbican_204.png" />
+```
+MariaDB [barbican]> select * from secrets where id='3fa6b963-1bba-4c2b-8033-25446a2ffbfc';
++--------------------------------------+---------------------+---------------------+------------+---------+--------+---------+---------------------+-----------+------------+------+-------------+----------------------------------+--------------------------------------+
+| id                                   | created_at          | updated_at          | deleted_at | deleted | status | name    | expiration          | algorithm | bit_length | mode | secret_type | creator_id                       | project_id                           |
++--------------------------------------+---------------------+---------------------+------------+---------+--------+---------+---------------------+-----------+------------+------+-------------+----------------------------------+--------------------------------------+
+| 3fa6b963-1bba-4c2b-8033-25446a2ffbfc | 2021-05-16 13:00:56 | 2021-05-16 13:00:56 | NULL       |       0 | ACTIVE | wj_expr | 2021-05-16 13:02:00 | aes       |        256 | cbc  | opaque      | d3da001bf87e475c81ee7c9b2396c87e | a98ff827-5b5d-47ba-830d-98de49179011 |
++--------------------------------------+---------------------+---------------------+------------+---------+--------+---------+---------------------+-----------+------------+------+-------------+----------------------------------+--------------------------------------+
+1 row in set (0.780 sec)
+```
 
-P.S. 和其他OpenStack对象一致，即使被删除了对象状态仍为`Active`，只是`deleted`和`deleted_at`两个字段会有值。
+P.S. 和其他 OpenStack 对象一致，即使被删除了对象状态仍为`Active`，只是`deleted`和`deleted_at`两个字段会有值。
 
 <br/>
 
-### 1.3 通过update接口，能更新证书有效期么？
+### 1.3 通过 update接口，能更新有效期么？
 
-不行。Barbican中的`update`接口，实际是用于 <u>先创建metadata再更新payload</u> 的 Secret 创建方式——类似Glance中 <u>先只创建Image再上传</u> 这种方式。
+不行。Barbican 中的`update`接口，实际是用于 <u>先创建 metadata 再更新 payload</u> 的 Secret 创建方式——类似Glance 中 <u>先只创建 Image 再上传</u> 这种方式。
 
 <br/>
 
-### 1.4 证书过期怎么办？支持自动续期么？
+### 1.4 支持自动续期么？
 
-其实，没办法，证书过期了就不能用了，Barbican 也并不提供自动更新的功能。想了想其实也合理，即使Barbican自动更新证书，但又不负责&没无法将证书同步更新到各个应用中，反而引入了不一致。所以，Barbican直接没管。
+不支持。Secret 过期了就不能用了，Barbican 也并不提供自动更新的功能。想了想其实也合理，即使 Barbican 自动更新证书，但又不负责&无法将证书同步更新到各个应用中，反而引入了不一致。所以，Barbican 直接没管。
 
 <u>课外问题：证书临期时，是否有告警？——没有。</u>
 
 <br/>
 
-### 1.5 如果证书正被使用，能够删除 Secret 么？
+### 1.5 如果 Secret 正被使用，能被删除么？
 
 这里先给出结论——可以，我后续将结合组件使用流程来验证。
 
-关于Barbican未保护使用中的 Secret，可能会有些异议——为何不锁住防止意外删除呢？
+关于 Barbican 未保护使用中的 Secret，可能会有些异议——为何不锁住防止意外删除呢？
 
-Barbican提供的是一种通用服务，我按照使用方式来理（xi）解（di）：
+Barbican 提供的是一种通用服务，我按照使用方式来理（xi）解（di）：
 
-- 除了证书外，有些是一次性的密码存储（如`password`类型），不涉及使用期保护；
-- 对于证书，Barbican更多提供的是存储功能（接口名都是`store`，而不是常用的的`create`），Barbican不会/也无法去确认证书后续的用法，比如是安装在环境中了、安装到VM里了；甚至只把Barbican来当一个证书存储器，证书被拿去它用了。
+- 除了证书外，有些是一次性的密码存储（如`password`类型），不涉及使用期保护
+- 对于证书，Barbican 更多提供的是存储功能（接口名都是`store`，而不是常用的的`create`），Barbican 不会/也无法去确认证书后续的用法，比如是安装在环境中了、安装到VM里了；甚至只把 Barbican 来当一个证书存储器，证书被拿去它用了
 
-所以，Barbican直接不管理这些过程：
+所以，Barbican 直接不管理这些过程：
 
 - 如果用户不指定有效期，就可一直使用；
 - 如果要删除，则需用户自行确认，资源不保留。而这与云平台中其他资源是类似的，比如：
   - VM 密码
-  - VM keypair密钥
+  - VM keypair 密钥对
 
-因此，若考虑基于Barbican提供商用功能时，建议这里将影响明示客户，防止误操作。
-
-<br/>
-
-### 1.6 说到这儿了，证书能用在什么流程中呢？
-
-用的比较多的是这两个：
-
-- Neutron/Octavia：用于 TLS终结（TLS-Terminated） HTTPS LB；
-- Magnum：管理 K8s 使用的证书。
-
-后面计划以LB这个来演示下，到时具体看。
+因此，若考虑基于 Barbican 提供商用功能时，建议这里将影响明示客户，防止误操作。
 
 <br/>
 
-## 2. 证书这里似乎和Keypair 很像，两者有何区别呢？
+## 2. 说到 keypair 了，证书似乎和它很像，两者有何区别？
 
-其实是一样的。在早期发展中，虚拟机需要通过`ssh`提供密钥访问能力，所以这部分工作由Nova来代为实现了，后续也就继续用了。在代码层面，Nova实际也是通过Python对应包（`cryptography`、`paramiko`）来创建密钥对的。
+其实是一样的。在早期发展中，虚拟机需要通过`ssh`提供密钥访问能力，所以这部分工作由Nova来代为实现了，后续也就继续用了。在代码层面，Nova 实际也是通过 Python 对应包（`cryptography`、`paramiko`）来创建密钥对的。
 
-从keypair的创建接口可以看出，支持指定`public-key`和`private-key` 以导入；当两者都不指定时将自动创建公私钥；然后公钥入库，私钥通过接口返回。
+从 keypair 的创建接口可以看出，支持指定`public-key`和`private-key` 以导入；当两者都不指定时将自动创建公私钥；然后公钥入库，私钥通过接口返回。
 
-此外，没有了。。Nova中的这部分能力就是仅用于虚拟机访问的，无法独立出来提供给其他服务使用（也不应该）。所以，这也算是Barbican诞生的一个原因吧。
+此外，没有了。。Nova 中的这部分能力就是仅用于虚拟机访问的，无法独立出来提供给其他服务使用（也不应该）。所以，这也算是 Barbican 诞生的一个原因吧。
 
 <br/>
 
-## 3. 总结下，Barbican与OpenStack其他组件的交互情况：
+## 3. 看之前举例，密钥/证书似乎都是手动导入到 Barbican 的。它支持自动创建么？
+
+好问题！
+
+如果观察仔细的话，会发现我都是通过 Secret 的 `store` 接口，将之前已创建好的密钥/证书，手动导入到 Barbican 里的（*直接存密码这种，其实也算是直接导入的*）。留意该接口名，用的是“store”，而不是一般对象常用的“create”接口。那是否意味着，Barbican 的 Secret，只能导入用？
+
+这时，就该 Barbican 中的另一个对象 `Order` 登场了。有了它，在部分不想/无法手动导入密钥和证书的场景时，你**可以用它来请求 Barbican 自主生成 Secret**，虽然支持自主创建的对象类型有限。而在版本发展变迁中，随着 CA（*Certificate Manager*）功能的废弃，Barbican 已经不再支持申请创建证书（*Certificate*），当前支持申请创建的是另外两种资源：对称密钥（*symmetric keys*） 和 非对称密钥（*asymmetric keys*）。
+
+我们将在下一讲着重讲解 `order` 对象。
+
+<br/>
+
+## 4. 总结下，Barbican 与 OpenStack 其他组件的交互情况：
 
 随着组件发展，Barbican 也逐步与其他 OpenStack 组件实现了功能融合。这里把上文提到的证书使用情况，也放在一起统计，主要体现在以下几部分：
 
