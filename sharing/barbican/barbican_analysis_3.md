@@ -213,9 +213,9 @@ Not Acceptable: Secret payload retrieval issue seen - Wrong payload content-type
 
 ```
 [root@cdpm03 opadmin]# od -x out_aes_data
-0000000      bfef    efbd    bdbf    ef4c    bdbf    2c71    bfef    efbd
-0000020      bdbf    2c26    ef2d    bdbf    3076    bfef    efbd    bdbf
-0000040      ef4c    bdbf    ef7a    bdbf    bfef    efbd    bdbf    000a
+0000000 bfef efbd bdbf ef4c bdbf 2c71 bfef efbd
+0000020 bdbf 2c26 ef2d bdbf 3076 bfef efbd bdbf
+0000040 ef4c bdbf ef7a bdbf bfef efbd bdbf 000a
 0000057
 ```
 
@@ -967,7 +967,7 @@ quota_cas = -1
 +-------+-------+              | 1            +-------+-------+
 |      ACL      |              |              |     Order     |
 +-------+-------+              |              +-------+-------+
-      1 ^                      v 1                    | 1
+      1 ^                      v N                    | 1
         |            1 +-------+-------+ 1            |
         +--------------+               +<-------------+
                        |     Secret    |
